@@ -17,4 +17,3 @@ SELECT * FROM orders WHERE orders.order_date > '2023-03-01';
 SELECT COUNT(orders.id) FROM orders WHERE orders.status IS 'Cancelled';
 
 SELECT * FROM products WHERE products.category IS 'Office Supplies';
-

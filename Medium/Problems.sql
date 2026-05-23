@@ -12,8 +12,8 @@ SELECT orders.id, orders.order_date FROM orders LEFT JOIN customers ON customers
 
 SELECT DISTINCT customers.first_name, customers.last_name FROM customers JOIN orders ON orders.customer_id = customers.id JOIN order_items ON order_items.order_id = orders.id WHERE order_items.product_id = 2;
 
-SELECT SUM(quantity * price_per_unit) AS 'revenue' FROM orders JOIN order_items ON order_items.order_id = id WHERE order_date LIKE '%2023-03%';
+SELECT SUM(quantity * price_per_unit) AS 'revenue' FROM orders JOIN order_items ON order_id = id WHERE order_date LIKE '%2023-03%';
 
 SELECT first_name, last_name FROM customers JOIN orders ON orders.customer_id = customers.id AND orders.status = 'Cancelled';
 
-SELECT customers.first_name, customers.last_name, order_count FROM customers JOIN (SELECT orders.customer_id, COUNT(*) AS 'order_count' FROM orders GROUP BY orders.customer_id) AS 'o' ON o.customer_id = customers.id WHERE order_count >= 2;
+SELECT first_name, last_name FROM customers LEFT JOIN (SELECT customer_id, status, COUNT(*) AS 'order_count' FROM orders GROUP BY customer_id) AS o ON o.customer_id = id WHERE o.order_count >= 1 AND o.status = 'Cancelled';
