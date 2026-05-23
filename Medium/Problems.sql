@@ -17,3 +17,11 @@ SELECT SUM(quantity * price_per_unit) AS 'revenue' FROM orders JOIN order_items 
 SELECT first_name, last_name FROM customers JOIN orders ON orders.customer_id = customers.id AND orders.status = 'Cancelled';
 
 SELECT first_name, last_name FROM customers LEFT JOIN (SELECT customer_id, status, COUNT(*) AS 'order_count' FROM orders GROUP BY customer_id) AS o ON o.customer_id = id WHERE o.order_count >= 1 AND o.status = 'Cancelled';
+
+SELECT c.first_name, c.last_name, o.order_count FROM customers c JOIN (select orders.customer_id, count(*) AS 'order_count' FROM orders GROUP BY orders.customer_id) AS 'o' ON o.customer_id = c.id WHERE o.order_count >= 2;
+
+SELECT AVG(avg_order_value) FROM orders JOIN (SELECT order_items.order_id, SUM(order_items.quantity * order_items.price_per_unit) AS 'avg_order_value' FROM order_items GROUP BY order_items.order_id) AS 'oi' ON oi.order_id = orders.id;
+
+SELECT p.name, oi.total_quantity FROM products p JOIN (SELECT order_items.product_id, SUM(order_items.quantity) AS 'total_quantity' FROM order_items GROUP BY order_items.product_id) AS 'oi' ON oi.product_id = p.id;
+
+SELECT c.first_name, c.last_name, o.first_order FROM customers c JOIN (SELECT orders.customer_id, MIN(orders.order_date) AS 'first_order' FROM orders GROUP BY orders.customer_id) AS 'o' ON o.customer_id = c.id;
