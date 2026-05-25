@@ -29,3 +29,9 @@ SELECT c.first_name, c.last_name, o.first_order FROM customers c JOIN (SELECT or
 SELECT STRFTIME('%Y-%m', orders.order_date) AS 'month', COUNT(orders.id) AS orders_in_month FROM orders WHERE orders.order_date LIKE '%2023%' GROUP BY STRFTIME('%m', orders.order_date);
 
 SELECT DISTINCT c.first_name, c.last_name FROM customers c JOIN orders ON orders.customer_id = c.id JOIN order_items ON order_items.order_id = orders.id JOIN products ON products.id = order_items.product_id WHERE products.category = 'Electronics';
+
+SELECT order_items.order_id AS 'order_id', order_items.quantity AS 'total_quantity' FROM order_items WHERE total_quantity > 3 GROUP BY order_items.order_id;
+
+SELECT SUM(order_items.quantity * order_items.price_per_unit) AS 'total_spent' FROM order_items JOIN orders ON orders.id = order_items.order_idJOIN customers ON customers.id = orders.customer_id WHERE customers.id = 5;
+
+SELECT c.first_name, c.last_name FROM customers c JOIN orders ON orders.customer_id = c.id JOIN order_items ON order_items.order_id = orders.id WHERE orders.order_date LIKE '%2023-04%';
