@@ -25,3 +25,7 @@ SELECT AVG(avg_order_value) FROM orders JOIN (SELECT order_items.order_id, SUM(o
 SELECT p.name, oi.total_quantity FROM products p JOIN (SELECT order_items.product_id, SUM(order_items.quantity) AS 'total_quantity' FROM order_items GROUP BY order_items.product_id) AS 'oi' ON oi.product_id = p.id;
 
 SELECT c.first_name, c.last_name, o.first_order FROM customers c JOIN (SELECT orders.customer_id, MIN(orders.order_date) AS 'first_order' FROM orders GROUP BY orders.customer_id) AS 'o' ON o.customer_id = c.id;
+
+SELECT STRFTIME('%Y-%m', orders.order_date) AS 'month', COUNT(orders.id) AS orders_in_month FROM orders WHERE orders.order_date LIKE '%2023%' GROUP BY STRFTIME('%m', orders.order_date);
+
+SELECT DISTINCT c.first_name, c.last_name FROM customers c JOIN orders ON orders.customer_id = c.id JOIN order_items ON order_items.order_id = orders.id JOIN products ON products.id = order_items.product_id WHERE products.category = 'Electronics';
