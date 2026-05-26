@@ -35,3 +35,9 @@ SELECT order_items.order_id AS 'order_id', order_items.quantity AS 'total_quanti
 SELECT SUM(order_items.quantity * order_items.price_per_unit) AS 'total_spent' FROM order_items JOIN orders ON orders.id = order_items.order_idJOIN customers ON customers.id = orders.customer_id WHERE customers.id = 5;
 
 SELECT c.first_name, c.last_name FROM customers c JOIN orders ON orders.customer_id = c.id JOIN order_items ON order_items.order_id = orders.id WHERE orders.order_date LIKE '%2023-04%';
+
+SELECT p.category, AVG(p.price) AS 'avg_price' FROM products p GROUP BY p.category;
+
+SELECT c.first_name, c.last_name, SUM(order_items.quantity * order_items.price_per_unit) AS 'total_spent' FROM customers c JOIN orders ON c.id = orders.customer_id JOIN order_items ON order_items.order_id = orders.id GROUP BY c.id HAVING total_spent > 500;
+
+SELECT p.name FROM products p LEFT JOIN order_items oi ON oi.product_id = p.id WHERE oi.product_id IS NULL;
