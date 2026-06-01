@@ -41,3 +41,9 @@ SELECT p.category, AVG(p.price) AS 'avg_price' FROM products p GROUP BY p.catego
 SELECT c.first_name, c.last_name, SUM(order_items.quantity * order_items.price_per_unit) AS 'total_spent' FROM customers c JOIN orders ON c.id = orders.customer_id JOIN order_items ON order_items.order_id = orders.id GROUP BY c.id HAVING total_spent > 500;
 
 SELECT p.name FROM products p LEFT JOIN order_items oi ON oi.product_id = p.id WHERE oi.product_id IS NULL;
+
+SELECT o.id AS 'id', SUM(oi.quantity * oi.price_per_unit) AS 'total' FROM orders o JOIN order_items oi ON oi.order_id = o.id GROUP BY o.id ORDER BY total DESC LIMIT 3;
+
+SELECT p.category, SUM(order_items.quantity * order_items.price_per_unit) AS 'total' FROM products p JOIN order_items ON order_items.product_id = p.id GROUP BY p.category;
+
+SELECT DISTINCT c.first_name, c.last_name FROM customers c JOIN orders o ON o.customer_id = c.id WHERE o.order_date LIKE '%2023%' ORDER BY o.order_date ASC;
