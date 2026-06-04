@@ -19,3 +19,34 @@ JOIN order_items oi ON oi.order_id = o.id
 JOIN products p ON p.id = oi.product_id
 WHERE p.name LIKE '%Laptop Pro 15"%'
 GROUP BY c.first_name, c.last_name;
+
+SELECT p.name
+FROM products p
+LEFT JOIN order_items oi ON oi.product_id = p.id
+WHERE oi.product_id IS NULL;
+
+SELECT c.first_name, c.last_name, COUNT(o.id) AS order_count, RANK() OVER(ORDER BY COUNT(DISTINCT o.id) DESC) AS customer_rank
+FROM customers c
+JOIN orders o ON o.customer_id = c.id
+GROUP BY c.id, c.first_name, c.last_name;
+
+or
+
+SELECT c.first_name, c.last_name, COUNT(DISTINCT oi.order_id) AS order_count, RANK() OVER(ORDER BY COUNT(DISTINCT oi.order_id)DESC) AS customer_rank
+FROM customers c
+JOIN orders o ON o.customer_id = c.id
+JOIN order_items oi ON oi.order_id = o.id
+GROUP BY c.id, c.first_name, c.last_name;
+
+SELECT DISTINCT p.name, p.price, RANK() OVER(ORDER BY p.price DESC) AS price_rank
+FROM products p WHERE p.category = 'Electronics';
+
+SELECT c.first_name, c.last_name, cnt
+FROM customers c
+JOIN (SELECT o.customer_id, COUNT(o.id) AS cnt FROM orders o GROUP BY o.customer_id) AS subquery ON subquery.customer_id = c.id
+ORDER BY cnt DESC
+LIMIT 2;
+
+SELECT c.first_name, c.last_name 
+FROM customers c WHERE EXISTS (SELECT * FROM orders o
+WHERE o.status = 'Processing' AND o.customer_id = c.id);
