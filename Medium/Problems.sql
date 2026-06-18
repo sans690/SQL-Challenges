@@ -1,3 +1,4 @@
+-- list customer first name, last name, and order dates where the first name is Liam and last name is Smith
 SELECT 
     customers.first_name,
     customers.last_name,

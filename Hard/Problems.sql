@@ -125,3 +125,42 @@ WHERE
         WHERE 
             o.status = 'Processing' 
         AND o.customer_id = c.id);
+
+SELECT 
+    p.name,
+    p.price
+FROM 
+    products p
+WHERE 
+    p.price > 130
+UNION
+SELECT 
+    p.name,
+    p.price
+FROM 
+    products p
+WHERE 
+    p.category = 'Books';
+
+WITH monthly_revenue AS(
+    SELECT 
+        strftime('%Y-%m', o.order_date) AS month, 
+        SUM(oi.quantity * oi.price_per_unit) AS revenue 
+    FROM orders o
+    JOIN   
+        order_items oi ON oi.order_id = o.id
+    WHERE 
+        month <= '2023-05'
+    GROUP BY 
+        month
+)
+SELECT 
+    mr.month,
+    SUM(mr.revenue) OVER(
+        ORDER BY 
+            month
+        ROWS UNBOUNDED PRECEDING) AS running_revenue
+FROM 
+    monthly_revenue mr
+ORDER BY 
+    mr.month;
